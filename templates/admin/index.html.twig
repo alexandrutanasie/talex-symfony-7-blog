@@ -11,6 +11,12 @@
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
 
+    {% if app.user %}
+        <div class="mb-3">
+            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+        </div>
+    {% endif %}
+
     This friendly message is coming from:
     <ul>
         <li>Your controller at <code>D:/GitHub/talex-symfony-7-blog/src/Controller/AdminController.php</code></li>
