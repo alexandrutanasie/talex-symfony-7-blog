@@ -28,6 +28,9 @@ class Category
     #[ORM\ManyToMany(targetEntity: Post::class, inversedBy: 'categories')]
     private Collection $posts;
 
+    #[ORM\Column(length: 1)]
+    private int $status = 1;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -75,6 +78,19 @@ class Category
         if (!$this->posts->contains($post)) {
             $this->posts->add($post);
         }
+
+        return $this;
+    }
+
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status):self
+    {
+        $this->status = $status;
 
         return $this;
     }

@@ -38,9 +38,13 @@ class Post
     #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'posts')]
     private Collection $categories;
 
+    #[ORM\Column(length: 1)]
+    private int $status = 1;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -92,6 +96,18 @@ class Post
     public function setUser(?UserInterface $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status):self
+    {
+        $this->status = $status;
 
         return $this;
     }

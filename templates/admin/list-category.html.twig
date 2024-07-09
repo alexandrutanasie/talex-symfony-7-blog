@@ -1,0 +1,12 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}List of categories{% endblock %}
+
+{% block body %}
+    <ul>
+        {% for category in categories %}
+            <li>{{ category.title }}</li>
+            <hr>
+        {% endfor %}
+    </ul>
+{% endblock %}
