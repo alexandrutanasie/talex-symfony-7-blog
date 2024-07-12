@@ -1,0 +1,23 @@
+{% extends 'admin.html.twig' %}
+
+{% block metaTitle %}List of posts{% endblock %}
+{% block title %}List of posts{% endblock %}
+
+{% block body %}
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+     <tbody>  
+        {% for post in posts %}
+            <tr>
+                <td>{{ post.title }}</td>
+                <td></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

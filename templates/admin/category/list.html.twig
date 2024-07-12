@@ -1,0 +1,22 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}List of categories{% endblock %}
+
+{% block body %}
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+     <tbody>  
+        {% for category in categories %}
+            <tr>
+                <td>{{ category.title }}</td>
+                <td></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

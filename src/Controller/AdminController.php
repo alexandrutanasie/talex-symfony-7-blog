@@ -29,7 +29,7 @@ class AdminController extends AbstractController
         $postRepository = $entityManager->getRepository(Post::class);
         $posts = $postRepository->findAll();
 
-        return $this->render('admin/list-post.html.twig', [
+        return $this->render('admin/post/list.html.twig', [
             'posts' => $posts,
         ]);
     }
@@ -54,7 +54,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_dashboard');
         }
 
-        return $this->render('admin/add-post.html.twig', [
+        return $this->render('admin/post/add.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
@@ -66,7 +66,7 @@ class AdminController extends AbstractController
         $categoryRepository = $entityManager->getRepository(Category::class);
         $categories = $categoryRepository->findAll();
 
-        return $this->render('admin/list-category.html.twig', [
+        return $this->render('admin/category/list.html.twig', [
             'categories' => $categories,
         ]);
     }
@@ -88,7 +88,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_dashboard');
         }
 
-        return $this->render('admin/add-category.html.twig', [
+        return $this->render('admin/category/add.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
