@@ -6,6 +6,8 @@ use App\Entity\Category;
 use App\Entity\Post;
 use App\Form\CategoryFormType;
 use App\Form\PostFormType;
+use App\Repository\CategoryRepository;
+use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -13,20 +15,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route("/admin")]
 class AdminController extends AbstractController
 {
-    #[Route('/admin', name: 'app_dashboard')]
+    #[Route('/', name: 'app_dashboard')]
     public function index(): Response
     {
-        return $this->render('admin/dashboard.html.twig', [
-            'controller_name' => 'AdminController',
-        ]);
+        return $this->render('admin/dashboard.html.twig');
     }
 
-    #[Route('/admin/post/list', name: 'list_post')]
-    public function listPost(EntityManagerInterface $entityManager): Response
-    {   
-        $postRepository = $entityManager->getRepository(Post::class);
+    #[Route('/post/list', name: 'list_post')]
+    public function listPost(PostRepository $postRepository): Response
+    {
         $posts = $postRepository->findAll();
 
         return $this->render('admin/post/list.html.twig', [
@@ -34,7 +34,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/post/add', name: 'add_post')]
+    #[Route('/post/add', name: 'add_post')]
     public function addPost(Request $request, Security $security, EntityManagerInterface $entityManager): Response
     {
         $entity = new Post();
@@ -51,16 +51,53 @@ class AdminController extends AbstractController
 
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('app_dashboard');
+            return $this->redirectToRoute('list_post');
         }
 
-        return $this->render('admin/post/add.html.twig', [
+        return $this->render('admin/post/form.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
     }
 
-    #[Route('/admin/category/list', name: 'list_category')]
+    #[Route("/post/{id}/edit", name: "post_edit")]
+    public function editPost(Request $request, Post $post, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(PostFormType::class, $post);
+        
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Post edited successfully.');
+            return $this->redirectToRoute('list_post');
+        }
+        
+        return $this->render('admin/post/form.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route("/post/{id}/delete", name: "post_delete")]
+    public function deletePost(Request $request, $id, PostRepository $postRepository,  EntityManagerInterface $entityManager): Response
+    {
+        $post = $postRepository->find($id);
+        
+        if (!$post) {
+            throw $this->createNotFoundException('No post found for id ' . $id);
+        }
+
+        // Delete the post
+        $entityManager->remove($post);
+        $entityManager->flush();
+
+        // Optionally add a flash message for user feedback
+        $this->addFlash('success', 'Post deleted successfully.');
+        return $this->redirectToRoute('list_post');
+    }
+
+    #[Route('/category/list', name: 'list_category')]
     public function listCategory(EntityManagerInterface $entityManager): Response
     {   
         $categoryRepository = $entityManager->getRepository(Category::class);
@@ -71,7 +108,7 @@ class AdminController extends AbstractController
         ]);
     }
     
-    #[Route('/admin/category/add', name: 'add_category')]
+    #[Route('/category/add', name: 'add_category')]
     public function addCategory(Request $request, Security $security, EntityManagerInterface $entityManager): Response
     {
         $entity = new Category();
@@ -85,12 +122,49 @@ class AdminController extends AbstractController
 
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('app_dashboard');
+            return $this->redirectToRoute('list_category');
         }
 
-        return $this->render('admin/category/add.html.twig', [
+        return $this->render('admin/category/form.html.twig', [
             'entity' => $entity,
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route("/category/{id}/edit", name: "category_edit")]
+    public function editCategory(Request $request, Category $category, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(CategoryFormType::class, $category);
+        
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Category edited successfully.');
+            return $this->redirectToRoute('list_category');
+        }
+        
+        return $this->render('admin/category/form.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route("/category/{id}/delete", name: "category_delete")]
+    public function deleteCategory(Request $request, $id, CategoryRepository $categoryRepository,  EntityManagerInterface $entityManager): Response
+    {
+        $category = $categoryRepository->find($id);
+        
+        if (!$category) {
+            throw $this->createNotFoundException('No category found for id ' . $id);
+        }
+
+        // Delete the post
+        $entityManager->remove($category);
+        $entityManager->flush();
+
+        // Optionally add a flash message for user feedback
+        $this->addFlash('success', 'Category deleted successfully.');
+        return $this->redirectToRoute('list_categories');
     }
 }

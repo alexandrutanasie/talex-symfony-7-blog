@@ -31,6 +31,9 @@ class Category
     #[ORM\Column(length: 1)]
     private int $status = 1;
 
+    #[ORM\Column(length: 255)]
+    private ?string $url = null;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -91,6 +94,18 @@ class Category
     public function setStatus(int $status):self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(string $url): static
+    {
+        $this->url = $url;
 
         return $this;
     }

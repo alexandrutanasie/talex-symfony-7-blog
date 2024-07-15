@@ -14,7 +14,10 @@
         {% for category in categories %}
             <tr>
                 <td>{{ category.title }}</td>
-                <td></td>
+                 <td>
+                    <a href="{{ path('category_edit', {'id': category.id}) }}" class="btn btn-primary">Edit</a>
+                    <a href="{{ path('category_delete', {'id': category.id}) }}" class="btn btn-danger">Delete</a>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

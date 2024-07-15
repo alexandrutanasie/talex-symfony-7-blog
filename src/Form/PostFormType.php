@@ -19,7 +19,7 @@ class PostFormType extends AbstractType
             ->add('body')
             ->add('categories', EntityType::class, [
                 'class' => Category::class,
-                'choice_label' => 'id',
+                'choice_label' => 'title',
                 'multiple' => true,
             ])
         ;

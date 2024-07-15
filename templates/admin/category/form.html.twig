@@ -9,12 +9,21 @@
                 'attr': {'class': 'form-control'},
                 'label_attr': {'class': 'form-label'}
                 }) }}
-        
+        {{ form_row(form.url,  {
+                'row_attr': {'class': 'form-group mb-3 col-lg-4'},
+                'attr': {'class': 'form-control'},
+                'label_attr': {'class': 'form-label'}
+                }) }}
         {{ form_row(form.body,  {
                 'row_attr': {'class': 'form-group mb-3 col-lg-4'},
                 'attr': {'class': 'form-control'},
                 'label_attr': {'class': 'form-label'}
-                }) }}               
+                }) }}   
+        {{ form_row(form.status,  {
+                'row_attr': {'class': 'form-group mb-3 col-lg-4'},
+                'attr': {'class': 'form-check'},
+                'label_attr': {'class': 'form-check-label'}
+                }) }}                    
         
         <div class="form-group mb-3 col-lg-4"><button class="btn btn-success">{{ button_label|default('Save') }}</button></div>
     {{ form_end(form) }}

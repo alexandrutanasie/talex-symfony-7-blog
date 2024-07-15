@@ -41,7 +41,6 @@
             <div id="content">
                 <!-- Topbar -->
                 {% include 'layouts/navbar-top.html.twig' %}
-                <div th:replace="~{layout/navbar-top}"></div>
                 <!-- End of Topbar -->
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -53,6 +52,11 @@
                             </h6>
                         </div>
                         <div class="card-body">
+                            {% for flash_message in app.session.flashbag.get('success') %}
+                                <div class="alert alert-success">
+                                    {{ flash_message }}
+                                </div>
+                            {% endfor %}
                             {% block body %}{% endblock %}
                         </div>
                     </div>
