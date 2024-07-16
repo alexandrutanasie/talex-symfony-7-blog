@@ -1,12 +1,13 @@
 {% extends 'admin.html.twig' %}
-
+{% block metaTitle %}List of categories{% endblock %}
 {% block title %}List of categories{% endblock %}
 
 {% block body %}
-    <table class="table">
+    <table class="table table-bordered">
     <thead>
         <tr>
             <th>Name</th>
+            <th>Url</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -14,6 +15,7 @@
         {% for category in categories %}
             <tr>
                 <td>{{ category.title }}</td>
+                <td><pre>{{ category.url }}</pre></td>
                  <td>
                     <a href="{{ path('category_edit', {'id': category.id}) }}" class="btn btn-primary">Edit</a>
                     <a href="{{ path('category_delete', {'id': category.id}) }}" class="btn btn-danger">Delete</a>
