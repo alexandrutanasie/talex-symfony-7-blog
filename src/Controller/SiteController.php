@@ -19,7 +19,7 @@ class SiteController extends AbstractController
         ]);
     }
 
-    #[Route('/{url}', name: 'homepage')]
+    #[Route('/{url}', name: 'main_url')]
     public function main(PostRepository $postRepository, CategoryRepository $categoryRepository, $url): Response
     {
         $category = $categoryRepository->findOneBy(['url' => $url]);
@@ -31,20 +31,20 @@ class SiteController extends AbstractController
         $post = $postRepository->findOneBy(['url' => $url]);
 
         if($post){
-            return $this->actionCategory($category);
+            return $this->actionPost($post);
         }
 
     }
 
-    protected function actionCategory(){
-        return $this->render('index.html.twig',[
+    protected function actionCategory($category){
+        return $this->render('site/category_view.html.twig',[
             'message' => 'Welcome to your new category!',
             'path' => 'src/Controller/SiteController.php',
         ]);
     }
 
-    protected function actionPost(){
-        return $this->render('index.html.twig',[
+    protected function actionPost($post){
+        return $this->render('site/post_view.html.twig',[
             'message' => 'Welcome to your new post page!',
             'path' => 'src/Controller/SiteController.php',
         ]);
