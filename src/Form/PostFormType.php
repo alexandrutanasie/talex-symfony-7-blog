@@ -22,6 +22,7 @@ class PostFormType extends AbstractType
                 'choice_label' => 'title',
                 'multiple' => true,
             ])
+            ->add('url')
         ;
     }
 

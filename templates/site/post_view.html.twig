@@ -1,8 +1,14 @@
-
 {% extends "base.html.twig" %}
 
-{% block title %}Welcome post!{% endblock %}
-
+{% block title %}{{post.title}}{% endblock %}
+{% block header_title %}{{post.title}}{% endblock %}
 {% block body %}
-<h1>posts</h1>
+ <!-- Features section-->
+        <section class="py-5" id="features">
+            <div class="container px-5 my-5">
+                <div class="row gx-5">
+                    {{post.body}}
+                </div>
+            </div>
+        </section>
 {% endblock %}

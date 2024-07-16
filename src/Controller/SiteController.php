@@ -11,11 +11,12 @@ use Symfony\Component\Routing\Attribute\Route;
 class SiteController extends AbstractController
 {
     #[Route('/', name: 'home')]
-    public function index(): Response
+    public function index(PostRepository $postRepository): Response
     {
+        $latestPosts = $postRepository->findLatestArticles();
+
         return $this->render('index.html.twig',[
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/SiteController.php',
+            'latestPosts' => $latestPosts
         ]);
     }
 
@@ -37,16 +38,15 @@ class SiteController extends AbstractController
     }
 
     protected function actionCategory($category){
+            
         return $this->render('site/category_view.html.twig',[
-            'message' => 'Welcome to your new category!',
-            'path' => 'src/Controller/SiteController.php',
+            'category' => $category
         ]);
     }
 
     protected function actionPost($post){
         return $this->render('site/post_view.html.twig',[
-            'message' => 'Welcome to your new post page!',
-            'path' => 'src/Controller/SiteController.php',
+            'post' => $post
         ]);
     }
 }

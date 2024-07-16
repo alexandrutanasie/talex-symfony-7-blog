@@ -35,7 +35,8 @@ class Post
     /**
      * @var Collection<int, Category>
      */
-    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'posts')]
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'posts')]
+    #[ORM\JoinTable(name: 'post_category')]
     private Collection $categories;
 
     #[ORM\Column(length: 1)]
@@ -133,6 +134,14 @@ class Post
     public function getCategories(): Collection
     {
         return $this->categories;
+    }
+
+    
+    public function setCategories(Collection $categories): self
+    {
+        $this->categories = $categories;
+
+        return $this;
     }
 
     public function addCategory(Category $category): static
