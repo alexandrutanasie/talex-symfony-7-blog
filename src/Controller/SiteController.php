@@ -35,6 +35,8 @@ class SiteController extends AbstractController
             return $this->actionPost($post);
         }
 
+        return $this->render("error404.html.twig");
+
     }
 
     protected function actionCategory($category){
