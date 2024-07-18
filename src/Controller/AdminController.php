@@ -5,14 +5,17 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Entity\Post;
 use App\Form\CategoryFormType;
+use App\Form\ChangePasswordFormType;
 use App\Form\PostFormType;
 use App\Repository\CategoryRepository;
 use App\Repository\PostRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route("/admin")]
@@ -166,5 +169,31 @@ class AdminController extends AbstractController
         // Optionally add a flash message for user feedback
         $this->addFlash('success', 'Category deleted successfully.');
         return $this->redirectToRoute('list_categories');
+    }
+
+    #[Route('/user/change-password', name: 'change_password')]
+    public function changePassword(Request $request, Security $security, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    {
+        $user = $userRepository->findOneBy(["id" => $security->getUser()->getId()]);
+
+        $form = $this->createForm(ChangePasswordFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+           
+            $newPassword = $form->get('newPassword')->getData();
+            $user->setPassword(
+                $userPasswordHasher->hashPassword($user, $newPassword)
+            );
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Password changed successfully.');
+
+            return $this->redirectToRoute('app_dashboard');
+        }
+
+        return $this->render('admin/user/change-password.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }
