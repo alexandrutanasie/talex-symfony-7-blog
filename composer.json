@@ -25,6 +25,7 @@
         "twig/string-extra": "^3.10"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.6",
         "symfony/maker-bundle": "^1.60"
     },
     "config": {
