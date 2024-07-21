@@ -182,6 +182,14 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
            
             $newPassword = $form->get('newPassword')->getData();
+            $confirmPassword = $form->get('confirmPassword')->getData();
+
+            if ($newPassword !== $confirmPassword) {
+                $this->addFlash('error', 'The passwords do not match.');
+                return $this->redirectToRoute('change_password');
+            }
+
+
             $user->setPassword(
                 $userPasswordHasher->hashPassword($user, $newPassword)
             );
