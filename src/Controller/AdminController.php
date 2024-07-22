@@ -17,10 +17,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route("/admin")]
 class AdminController extends AbstractController
 {
+    public function __construct(
+        private SluggerInterface $slugger,
+    ) {
+    }
+
     #[Route('/', name: 'app_dashboard')]
     public function index(): Response
     {
@@ -49,6 +55,11 @@ class AdminController extends AbstractController
             $user = $security->getUser();
             $entity->setUser($user);
 
+            $url =  $form->get('url')->getData();
+            $slug = strtolower($this->slugger->slug($url));
+
+            $entity->setUrl($slug);
+
             $entityManager->persist($entity);
             $entityManager->flush();
 
@@ -71,6 +82,11 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
+            $url =  $form->get('url')->getData();
+            $slug = strtolower($this->slugger->slug($url));
+
+            $post->setUrl($slug);
+
             $entityManager->flush();
 
             $this->addFlash('success', 'Post edited successfully.');
@@ -120,6 +136,12 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $url =  $form->get('url')->getData();
+            $slug = strtolower($this->slugger->slug($url));
+
+            $entity->setUrl($slug);
+
+
             $entityManager->persist($entity);
             $entityManager->flush();
 
@@ -142,6 +164,11 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
+            $url =  $form->get('url')->getData();
+            $slug = strtolower($this->slugger->slug($url));
+
+            $category->setUrl($slug);
+            
             $entityManager->flush();
 
             $this->addFlash('success', 'Category edited successfully.');
